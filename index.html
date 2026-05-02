@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Psychology of Marketing — Marco Sager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy:   #0b1220;
+      --navy-2: #111c30;
+      --navy-3: #1a2744;
+      --gold:   #c4973a;
+      --gold-2: #ddb96a;
+      --cream:  #f2ede4;
+      --muted:  #8a9ab8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE TEXTURE ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(11,18,32,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(196,151,58,0.12);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; letter-spacing: 0.08em;
+      color: var(--gold); text-decoration: none;
+    }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 20px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-2); }
+
+    @media (max-width: 640px) {
+      nav { padding: 18px 20px; }
+      .nav-cta { display: none; }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 80px 80px;
+      gap: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 0% 50%, rgba(26,39,68,0.9) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 100% 0%, rgba(196,151,58,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(11,18,32,0.8) 0%, transparent 70%);
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 400;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 32px; height: 1px; background: var(--gold); opacity: 0.6;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 20px;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--gold);
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 16px; line-height: 1.7;
+      color: rgba(242,237,228,0.65);
+      max-width: 440px;
+      margin-bottom: 40px;
+    }
+
+    .hero-author {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 44px;
+    }
+    .hero-author-line {
+      width: 28px; height: 1px;
+      background: var(--gold); opacity: 0.5;
+    }
+    .hero-author-name {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); font-weight: 400;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11.5px; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 8px 32px rgba(196,151,58,0.3), 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .btn-primary:hover {
+      background: var(--gold-2);
+      box-shadow: 0 12px 40px rgba(196,151,58,0.45), 0 4px 16px rgba(0,0,0,0.5);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 15px 28px;
+      border: 1px solid rgba(196,151,58,0.3);
+      color: var(--gold);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11.5px; font-weight: 400; letter-spacing: 0.16em;
+      text-transform: uppercase; text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(196,151,58,0.7);
+      background: rgba(196,151,58,0.06);
+    }
+
+    .hero-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+    /* ─── BOOK COVER ─── */
+    .hero-book { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; }
+
+    .book-wrapper {
+      position: relative;
+      transform: perspective(1000px) rotateY(-8deg) rotateX(2deg);
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .book-wrapper:hover {
+      transform: perspective(1000px) rotateY(-4deg) rotateX(1deg) scale(1.02);
+    }
+
+    .book-cover {
+      width: clamp(220px, 28vw, 360px);
+      height: auto;
+      display: block;
+      box-shadow:
+        -12px 16px 0 rgba(0,0,0,0.5),
+        -20px 28px 60px rgba(0,0,0,0.7),
+        0 8px 24px rgba(196,151,58,0.15);
+    }
+
+    .book-glow {
+      position: absolute; inset: -40px;
+      background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(196,151,58,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── STRIPS ─── */
+    .stats-strip {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(196,151,58,0.12);
+      border-bottom: 1px solid rgba(196,151,58,0.12);
+      padding: 32px 80px;
+      display: flex; align-items: center; justify-content: center; gap: 72px;
+      background: rgba(26,39,68,0.3);
+    }
+
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 600;
+      color: var(--gold); line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-top: 6px; font-weight: 400;
+    }
+    .stat-divider {
+      width: 1px; height: 40px;
+      background: rgba(196,151,58,0.2);
+    }
+
+    /* ─── SECTIONS ─── */
+    section { position: relative; z-index: 1; }
+
+    .section-eyebrow {
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 400;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-eyebrow::after {
+      content: ''; flex: 1; max-width: 40px; height: 1px;
+      background: var(--gold); opacity: 0.4;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 600; line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+    .section-heading em { font-style: italic; color: var(--gold); }
+
+    /* ─── INSIGHTS GRID ─── */
+    .insights-section { padding: 100px 80px; }
+
+    .insights-intro {
+      max-width: 560px;
+      margin-bottom: 64px;
+    }
+    .insights-intro p {
+      font-size: 16px; line-height: 1.75;
+      color: rgba(242,237,228,0.6);
+      margin-top: 20px;
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(196,151,58,0.08);
+    }
+
+    .insight-card {
+      background: var(--navy-2);
+      padding: 44px 36px 40px;
+      border-top: 2px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .insight-card:hover {
+      border-top-color: var(--gold);
+      background: #16233a;
+    }
+    .insight-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: rgba(196,151,58,0.08);
+    }
+
+    .insight-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px; letter-spacing: 0.2em;
+      color: rgba(196,151,58,0.4);
+      margin-bottom: 20px; font-weight: 400;
+    }
+    .insight-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--cream); line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .insight-body {
+      font-size: 13.5px; line-height: 1.75;
+      color: rgba(242,237,228,0.55);
+    }
+
+    /* ─── PULL QUOTE ─── */
+    .quote-section {
+      padding: 100px 80px;
+      background: linear-gradient(135deg, rgba(26,39,68,0.6) 0%, rgba(11,18,32,0.8) 100%);
+      border-top: 1px solid rgba(196,151,58,0.1);
+      border-bottom: 1px solid rgba(196,151,58,0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 120px; line-height: 0.8;
+      color: rgba(196,151,58,0.12);
+      position: absolute; top: 40px; left: 80px;
+      font-weight: 700;
+    }
+
+    .pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3.5vw, 38px);
+      font-weight: 500; font-style: italic;
+      line-height: 1.45;
+      color: var(--cream);
+      max-width: 780px;
+      margin: 0 auto 32px;
+      position: relative; z-index: 1;
+    }
+    .pull-quote em { color: var(--gold); font-style: normal; }
+
+    .quote-attribution {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── SUCCESS TRIO ─── */
+    .trio-section { padding: 100px 80px; }
+
+    .trio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .trio-card {
+      padding: 48px 36px;
+      border: 1px solid rgba(196,151,58,0.12);
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .trio-card:hover {
+      border-color: rgba(196,151,58,0.35);
+      box-shadow: 0 8px 40px rgba(196,151,58,0.08);
+    }
+
+    .trio-number {
+      position: absolute; top: -14px; left: 36px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Playfair Display', serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 4px 12px;
+    }
+
+    .trio-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 600;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .trio-desc {
+      font-size: 14px; line-height: 1.75;
+      color: rgba(242,237,228,0.6);
+    }
+    .trio-truth {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(196,151,58,0.12);
+      font-size: 12px; font-style: italic;
+      color: rgba(196,151,58,0.7); line-height: 1.6;
+    }
+
+    /* ─── AUTHOR ─── */
+    .author-section {
+      padding: 100px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-top: 1px solid rgba(196,151,58,0.1);
+    }
+
+    .author-photo-wrap {
+      position: relative;
+    }
+    .author-photo {
+      width: 100%; max-width: 400px;
+      display: block;
+      filter: grayscale(20%);
+    }
+    .author-photo-frame {
+      position: absolute;
+      inset: -12px -12px 12px 12px;
+      border: 1px solid rgba(196,151,58,0.2);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .author-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(196,151,58,0.1);
+      border: 1px solid rgba(196,151,58,0.2);
+      padding: 6px 14px;
+      font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px;
+    }
+
+    .author-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 600; line-height: 1.1;
+      color: var(--cream); margin-bottom: 8px;
+    }
+
+    .author-title {
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 28px;
+    }
+
+    .author-bio {
+      font-size: 15px; line-height: 1.8;
+      color: rgba(242,237,228,0.6);
+      margin-bottom: 32px;
+    }
+    .author-bio strong { color: var(--gold); font-weight: 400; }
+
+    .author-stats {
+      display: flex; gap: 40px; margin-bottom: 40px;
+    }
+    .author-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; color: var(--gold);
+    }
+    .author-stat-label {
+      font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-top: 2px;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .cta-section {
+      padding: 120px 80px;
+      text-align: center;
+      background: linear-gradient(180deg, transparent 0%, rgba(196,151,58,0.04) 50%, transparent 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-ornament {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,151,58,0.04);
+      pointer-events: none;
+    }
+    .cta-ornament-2 {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,151,58,0.07);
+      pointer-events: none;
+    }
+
+    .cta-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600; line-height: 1.15;
+      color: var(--cream);
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .cta-heading em { font-style: italic; color: var(--gold); }
+
+    .cta-sub {
+      font-size: 16px; line-height: 1.7;
+      color: rgba(242,237,228,0.55);
+      max-width: 500px; margin: 0 auto 48px;
+      position: relative; z-index: 1;
+    }
+
+    .cta-buttons {
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      position: relative; z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: 11.5px; color: rgba(138,154,184,0.6);
+      position: relative; z-index: 1;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #080e1a;
+      border-top: 1px solid rgba(196,151,58,0.1);
+      padding: 44px 80px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px; color: rgba(196,151,58,0.5);
+    }
+
+    .footer-links {
+      display: flex; gap: 32px;
+    }
+    .footer-links a {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(138,154,184,0.45); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 100px 32px 60px; gap: 48px; text-align: center; }
+      .hero-book { order: -1; }
+      .hero-eyebrow { justify-content: center; }
+      .hero-subtitle { margin: 0 auto 32px; }
+      .hero-author { justify-content: center; }
+      .hero-ctas { justify-content: center; }
+      .stats-strip { padding: 28px 32px; gap: 32px; flex-wrap: wrap; }
+      .insights-section, .trio-section, .author-section, .quote-section, .cta-section { padding: 72px 32px; }
+      .insights-grid { grid-template-columns: 1fr; }
+      .trio-grid { grid-template-columns: 1fr; gap: 28px; }
+      .author-section { grid-template-columns: 1fr; gap: 40px; }
+      .author-photo { max-width: 280px; margin: 0 auto; }
+      footer { flex-direction: column; gap: 20px; text-align: center; padding: 36px 24px; }
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.revealed, .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Marco Sager</a>
+  <a href="#get-book" class="nav-cta">Get the Book</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">New Release</div>
+    <h1 class="hero-title font-display">
+      The Psychology<br>
+      of Marketing
+      <em>Why People Buy.</em>
+    </h1>
+    <p class="hero-subtitle">
+      You don't lose customers because your product is bad.
+      You lose them because you never understood how they think.
+      This book changes that.
+    </p>
+    <div class="hero-author">
+      <div class="hero-author-line"></div>
+      <span class="hero-author-name">by Marco Sager</span>
+    </div>
+    <div class="hero-ctas">
+      <a href="#get-book" class="btn-primary">Get the Book &nbsp;→</a>
+      <a href="#insights" class="btn-secondary">See Inside</a>
+    </div>
+  </div>
+
+  <div class="hero-book">
+    <div class="book-wrapper">
+      <div class="book-glow"></div>
+      <img src="book-cover.png" alt="The Psychology of Marketing — Marco Sager" class="book-cover" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<div class="stats-strip reveal">
+  <div class="stat-item">
+    <div class="stat-num">20+</div>
+    <div class="stat-label">Years Building Brands</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">154K</div>
+    <div class="stat-label">Social Followers</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Companies Founded</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">Thailand</div>
+    <div class="stat-label">Since 1983</div>
+  </div>
+</div>
+
+<!-- ─── INSIGHTS ─── -->
+<section class="insights-section" id="insights">
+  <div class="insights-intro reveal">
+    <div class="section-eyebrow">What's Inside</div>
+    <h2 class="section-heading">Marketing is not math.<br><em>It's psychology.</em></h2>
+    <p>Seven frameworks that change how you see every customer interaction — drawn from 20 years of real experience building brands across cultures.</p>
+  </div>
+
+  <div class="insights-grid">
+    <div class="insight-card reveal">
+      <div class="insight-num">01 — Core Principle</div>
+      <h3 class="insight-title font-display">Marketing is a Tool to Change Human Behavior</h3>
+      <p class="insight-body">It's not ads, funnels, or social posts. It works by guiding perception — because perception shapes emotions, and emotions drive every decision.</p>
+    </div>
+    <div class="insight-card reveal reveal-delay-1">
+      <div class="insight-num">02 — The 3 Signs</div>
+      <h3 class="insight-title font-display">Great Marketing Changes What People Think, Do, and Say</h3>
+      <p class="insight-body">It shifts perception, inspires action without pressure, and makes your audience spread your message for you. Everything else is just noise.</p>
+    </div>
+    <div class="insight-card reveal reveal-delay-2">
+      <div class="insight-num">03 — The Multiplier</div>
+      <h3 class="insight-title font-display">Marketing Isn't a Trick — It's a Multiplier</h3>
+      <p class="insight-body">It shapes who applies to work with you, what you can charge, which customers you attract, how loyal they are, and how stable your cash flow is.</p>
+    </div>
+    <div class="insight-card reveal reveal-delay-1">
+      <div class="insight-num">04 — The Hard Truth</div>
+      <h3 class="insight-title font-display">The Harsh Truth About Business</h3>
+      <p class="insight-body">The wrong idea in the wrong market is a recipe for disaster — no matter how hard you work. You don't just lose money. You lose energy, confidence, and momentum.</p>
+    </div>
+    <div class="insight-card reveal reveal-delay-2">
+      <div class="insight-num">05 — The Myth</div>
+      <h3 class="insight-title font-display">"A Good Product Will Sell Itself" Is a Lie</h3>
+      <p class="insight-body">The world is full of great products nobody has heard of. Without visibility, even excellence goes unnoticed. Without marketing, even the best product stays invisible.</p>
+    </div>
+    <div class="insight-card reveal reveal-delay-3">
+      <div class="insight-num">06 — The Framework</div>
+      <h3 class="insight-title font-display">The Success Trio: Market + Marketing + Product</h3>
+      <p class="insight-body">Every successful business aligns three elements. Miss just one, and the whole structure collapses. Get all three aligned, and growth becomes sustainable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PULL QUOTE ─── -->
+<section class="quote-section reveal">
+  <div class="quote-mark">"</div>
+  <p class="pull-quote font-display">
+    People don't buy with logic alone.
+    They buy with <em>emotion</em>,
+    justified later by logic.
+  </p>
+  <div class="quote-attribution">— Marco Sager, The Psychology of Marketing</div>
+</section>
+
+<!-- ─── SUCCESS TRIO ─── -->
+<section class="trio-section">
+  <div class="reveal">
+    <div class="section-eyebrow">The Framework</div>
+    <h2 class="section-heading">The three pillars<br><em>every business needs.</em></h2>
+  </div>
+
+  <div class="trio-grid">
+    <div class="trio-card reveal">
+      <div class="trio-number">Pillar 01</div>
+      <div class="trio-label font-display">The Market</div>
+      <p class="trio-desc">The foundation of everything. Is there a real, urgent problem to solve? If the answer is no, nothing else matters. Even the best product can't survive where there's no demand.</p>
+      <div class="trio-truth">Remove it → You're solving problems nobody cares about.</div>
+    </div>
+    <div class="trio-card reveal reveal-delay-1">
+      <div class="trio-number">Pillar 02</div>
+      <div class="trio-label font-display">The Marketing</div>
+      <p class="trio-desc">Do you make the problem visible and attract the right people? Great marketing shines a light on the pain your customer already feels and positions you as the guide to the solution.</p>
+      <div class="trio-truth">Remove it → Nobody hears about you, no matter how good you are.</div>
+    </div>
+    <div class="trio-card reveal reveal-delay-2">
+      <div class="trio-number">Pillar 03</div>
+      <div class="trio-label font-display">The Product</div>
+      <p class="trio-desc">Does your offer actually deliver? If your product doesn't keep its promise, you lose trust — and trust is nearly impossible to rebuild once broken.</p>
+      <div class="trio-truth">Remove it → People buy once, then never return.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AUTHOR ─── -->
+<section class="author-section">
+  <div class="author-photo-wrap reveal">
+    <div class="author-photo-frame"></div>
+    <img src="marco-sager-photo.jpg" alt="Marco Sager" class="author-photo" onerror="this.parentElement.style.display='none'">
+  </div>
+  <div class="reveal reveal-delay-1">
+    <div class="author-tag">About the Author</div>
+    <h2 class="author-name font-display">Marco Sager</h2>
+    <div class="author-title">Founder · Dreamkey Media &amp; Dreamkey Entertainment</div>
+    <p class="author-bio">
+      Born in Germany, raised in Thailand. Over <strong>20 years</strong> building brands, producing media, and helping businesses grow across cultures — from nightlife and events to consulting and digital strategy.
+      <br><br>
+      One lesson guided everything: success doesn't come from products alone. It comes from <strong>psychology</strong> — from understanding why people buy.
+    </p>
+    <div class="author-stats">
+      <div>
+        <div class="author-stat-num font-display">20+</div>
+        <div class="author-stat-label">Years Experience</div>
+      </div>
+      <div>
+        <div class="author-stat-num font-display">154K</div>
+        <div class="author-stat-label">Thai by Heart Followers</div>
+      </div>
+      <div>
+        <div class="author-stat-num font-display">2</div>
+        <div class="author-stat-label">Companies Founded</div>
+      </div>
+    </div>
+    <a href="https://marcosager.com" target="_blank" rel="noopener" class="btn-secondary">Visit marcosager.com &nbsp;→</a>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="cta-section" id="get-book">
+  <div class="cta-ornament"></div>
+  <div class="cta-ornament-2"></div>
+
+  <div class="reveal">
+    <div class="section-eyebrow" style="justify-content:center;">Get the Book</div>
+    <h2 class="cta-heading font-display">
+      Stop guessing.<br>
+      <em>Start understanding.</em>
+    </h2>
+    <p class="cta-sub">
+      Apply the psychology of marketing and build systems that consistently attract, convert, and retain the customers you actually want.
+    </p>
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary">Download Now &nbsp;→</a>
+      <a href="https://wa.me/66970952522" target="_blank" rel="noopener" class="btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.8"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Ask Marco
+      </a>
+    </div>
+    <p class="cta-note">Free ebook · No signup required</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-brand">Marco Sager · The Psychology of Marketing</div>
+  <div class="footer-links">
+    <a href="https://marcosager.com" target="_blank">marcosager.com</a>
+    <a href="https://www.dreamkeymedia.asia" target="_blank">Dreamkey Media</a>
+    <a href="mailto:info@dreamkeymedia.asia">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
